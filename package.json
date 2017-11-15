@@ -1,0 +1,46 @@
+{
+  "name": "preload-css-webpack-plugin",
+  "version": "0.1.0",
+  "description": "An addon for html-webpack-plugin",
+  "main": "index.js",
+  "scripts": {
+    "test": "node_modules/jasmine/bin/jasmine.js test/spec.js"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/spencerstark/PreloadCSSWebpackPlugin.git"
+  },
+  "keywords": [
+    "webpack",
+    "plugin",
+    "html-webpack-plugin",
+    "preload",
+    "css",
+    "loadcss"
+  ],
+  "author": "Spencer Stark",
+  "license": "MIT",
+  "bugs": {
+    "url": "https://github.com/spencerstark/PreloadCSSWebpackPlugin/issues"
+  },
+  "homepage": "https://github.com/spencerstark/PreloadCSSWebpackPlugin#readme",
+  "devDependencies": {
+    "babel-eslint": "^7.1.1",
+    "clone": "^2.1.1",
+    "css-loader": "^0.28.7",
+    "eslint": "^3.14.1",
+    "eslint-config-google": "^0.7.1",
+    "extract-text-webpack-plugin": "^3.0.2",
+    "html-webpack-plugin": "^2.26.0",
+    "jasmine": "^2.5.3",
+    "style-loader": "^0.19.0",
+    "webpack": "^3.2.0",
+    "webpack-canary": "^1.0.6"
+  },
+  "peerDependencies": {
+    "webpack": "^3.2.0"
+  },
+  "dependencies": {
+    "object-assign": "^4.1.1"
+  }
+}
