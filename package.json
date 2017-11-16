@@ -3,6 +3,9 @@
   "version": "0.1.0",
   "description": "An addon for html-webpack-plugin",
   "main": "index.js",
+  "files": [
+    "index.js"
+  ],
   "scripts": {
     "test": "node_modules/jasmine/bin/jasmine.js test/spec.js"
   },
@@ -25,7 +28,6 @@
   },
   "homepage": "https://github.com/spencerstark/PreloadCSSWebpackPlugin#readme",
   "devDependencies": {
-    "babel-eslint": "^7.1.1",
     "clone": "^2.1.1",
     "css-loader": "^0.28.7",
     "eslint": "^3.14.1",
@@ -39,8 +41,5 @@
   },
   "peerDependencies": {
     "webpack": "^3.2.0"
-  },
-  "dependencies": {
-    "object-assign": "^4.1.1"
   }
 }
