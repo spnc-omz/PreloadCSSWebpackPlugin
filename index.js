@@ -1,4 +1,3 @@
-/* eslint no-console: ["1", { allow: ["warn", "error"] }] */
 "use strict";
 
 const clone = require("clone");
