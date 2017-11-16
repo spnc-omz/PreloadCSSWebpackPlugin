@@ -11,7 +11,7 @@
   },
   "repository": {
     "type": "git",
-    "url": "git+https://github.com/spencerstark/PreloadCSSWebpackPlugin.git"
+    "url": "git+https://github.com/spnc-omz/PreloadCSSWebpackPlugin.git"
   },
   "keywords": [
     "webpack",
@@ -24,9 +24,9 @@
   "author": "Spencer Stark",
   "license": "MIT",
   "bugs": {
-    "url": "https://github.com/spencerstark/PreloadCSSWebpackPlugin/issues"
+    "url": "https://github.com/spnc-omz/PreloadCSSWebpackPlugin/issues"
   },
-  "homepage": "https://github.com/spencerstark/PreloadCSSWebpackPlugin#readme",
+  "homepage": "https://github.com/spnc-omz/PreloadCSSWebpackPlugin#readme",
   "devDependencies": {
     "clone": "^2.1.1",
     "css-loader": "^0.28.7",
