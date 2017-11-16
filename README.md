@@ -20,7 +20,7 @@ Usage
 -----------------
 Require it in your webpack configuration:
 ```js
-const PreloadCSSPlugin = require("preload-css-webpack-plugin");
+const PreloadCssPlugin = require("preload-css-webpack-plugin");
 ```
 
 Add it to your Webpack `plugins` array after `HtmlWebpackPlugin` and `ExtractTextPlugin`:
@@ -46,7 +46,7 @@ This transformation is based on what Filament Group has found has best asynchron
 
 Configuring
 -----------------
-Preloadcss plugin offers two options at this point in time.
+Preload Css plugin offers two options at this point in time.
 
 |Name |Type |Default|Description|
 |:---:|:---:|:---:  |:----------|
