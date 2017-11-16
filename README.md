@@ -49,7 +49,7 @@ Configuring
 Preloadcss plugin offers two options at this point in time.
 |Name|Type|Default|Description|
 |:--:|:--:|:--:|:----------|
-|**`blacklist`**|`{Array}`|[/\.map/]|Allows for excluding files from being asynchronously loaded. Accepts regex pattern or string.|
+|**`blacklist`**|`{Array}`|`[/\.map/]`|Allows for excluding files from being asynchronously loaded. Accepts regex pattern or string.|
 |**`noscript`**|`{Boolean}`|`True`|Indicates whether or not to include noscript snippet on dom|
 
 ```js
