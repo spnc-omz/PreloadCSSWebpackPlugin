@@ -42,7 +42,7 @@ describe("PreloadCssPlugin works for single entry and single html webpack plugin
             console.log(result.compilation.errors);
             expect(JSON.stringify(result.compilation.errors)).toBe("[]");
             const html = result.compilation.assets["index.html"].source();
-            expect(html).toContain("<link href=\"/styles-home.css\" rel=\"preload\" as=\"style\" onload=\"this.rel='stylesheet'\">");
+            expect(html).toContain("<link href=\"/styles-home.css\" rel=\"preload\" as=\"style\" onload=\"this.onload=null;this.rel='stylesheet'\"");
             expect(html).toContain("<noscript><link href=\"/styles-home.css\" rel=\"stylesheet\"></noscript>");
             expect(html).not.toContain("</title>\n</head>");
             done();
@@ -168,7 +168,7 @@ describe("PreloadCssPlugin works for single entry and single html webpack plugin
             console.log(result.compilation.errors);
             expect(JSON.stringify(result.compilation.errors)).toBe("[]");
             const html = result.compilation.assets["index.html"].source();
-            expect(html).toContain("<link href=\"/styles-home.css\" rel=\"preload\" as=\"style\" onload=\"this.rel='stylesheet'\">");
+            expect(html).toContain("<link href=\"/styles-home.css\" rel=\"preload\" as=\"style\" onload=\"this.onload=null;this.rel='stylesheet'\"");
             expect(html).not.toContain("<noscript></noscript>");
             expect(html).not.toContain("</title>\n</head>");
             done();
@@ -212,6 +212,96 @@ describe("PreloadCssPlugin works for single entry and single html webpack plugin
             expect(JSON.stringify(result.compilation.errors)).toBe("[]");
             const html = result.compilation.assets["index.html"].source();
             expect(html).toContain("<link href=\"/styles-home.css\" rel=\"stylesheet\">");
+            expect(html).not.toContain("<noscript></noscript>");
+            expect(html).not.toContain("</title>\n</head>");
+            done();
+        });
+        compiler.outputFileSystem = new MemoryFileSystem();
+    });
+
+    it("adds custom scripts on css source", function(done) {
+        const compiler = webpack({
+            entry: {
+                home: path.join(__dirname, "assets", "home.js")
+            },
+            output: {
+                path: OUTPUT_DIR,
+                filename: "bundle.js",
+                chunkFilename: "chunk.[chunkhash].js",
+                publicPath: "/",
+            },
+            module: {
+                rules: [
+                    {
+                        test: /\.css$/,
+                        use: ExtractTextPlugin.extract({
+                            fallback: "style-loader",
+                            use: "css-loader"
+                        })
+                    }
+                ]
+            },
+            plugins: [
+                new HtmlWebpackPlugin(),
+                new ExtractTextPlugin("styles-[name].css"),
+                new PreloadCssPlugin({
+                    linkEventHandlers: {
+                        onload: "this.rel='stylesheet';console.log('hello world');"
+                    }
+                })
+            ]
+        }, function(err, result) {
+            expect(err).toBeFalsy();
+            console.log(result.compilation.errors);
+            expect(JSON.stringify(result.compilation.errors)).toBe("[]");
+            const html = result.compilation.assets["index.html"].source();
+            expect(html).toContain("<link href=\"/styles-home.css\" rel=\"preload\" as=\"style\" onload=\"this.rel='stylesheet';console.log('hello world');\">");
+            expect(html).toContain("<noscript><link href=\"/styles-home.css\" rel=\"stylesheet\"></noscript>");
+            expect(html).not.toContain("</title>\n</head>");
+            done();
+        });
+        compiler.outputFileSystem = new MemoryFileSystem();
+    });
+
+    it("skips noscript and merges linkEventHandlers", function(done) {
+        const compiler = webpack({
+            entry: {
+                home: path.join(__dirname, "assets", "home.js")
+            },
+            output: {
+                path: OUTPUT_DIR,
+                filename: "bundle.js",
+                chunkFilename: "chunk.[chunkhash].js",
+                publicPath: "/",
+            },
+            module: {
+                rules: [
+                    {
+                        test: /\.css$/,
+                        use: ExtractTextPlugin.extract({
+                            fallback: "style-loader",
+                            use: "css-loader"
+                        })
+                    }
+                ]
+            },
+            plugins: [
+                new HtmlWebpackPlugin(),
+                new ExtractTextPlugin("styles-[name].css"),
+                new PreloadCssPlugin({
+                    noscript: false,
+                    linkEventHandlers: {
+                        onload: "this.onload=null;this.rel='stylesheet';console.log('Loaded')",
+                        onerror: "console.log('Failed loading');"
+                    }
+                })
+            ]
+        }, function(err, result) {
+            expect(err).toBeFalsy();
+            console.log(result.compilation.errors);
+            expect(JSON.stringify(result.compilation.errors)).toBe("[]");
+            const html = result.compilation.assets["index.html"].source();
+            expect(html).toContain("<link href=\"/styles-home.css\" rel=\"preload\" as=\"style\" onload=\"this.onload=null;this.rel='stylesheet';console.log('Loaded')\" onerror=\"console.log('Failed loading');\"");
             expect(html).not.toContain("<noscript></noscript>");
             expect(html).not.toContain("</title>\n</head>");
             done();
@@ -267,11 +357,11 @@ describe("PreloadCssPlugin works with commonsChunkPlugin", function() {
             console.log(result.compilation.errors);
             expect(JSON.stringify(result.compilation.errors)).toBe("[]");
             const homehtml = result.compilation.assets["home.html"].source();
-            expect(homehtml).toContain("<link href=\"/styles-shared.css\" rel=\"preload\" as=\"style\" onload=\"this.rel='stylesheet'\"><link href=\"/styles-home.css\" rel=\"preload\" as=\"style\" onload=\"this.rel='stylesheet'\">");
+            expect(homehtml).toContain("<link href=\"/styles-shared.css\" rel=\"preload\" as=\"style\" onload=\"this.onload=null;this.rel='stylesheet'\"><link href=\"/styles-home.css\" rel=\"preload\" as=\"style\" onload=\"this.onload=null;this.rel='stylesheet'\"");
             expect(homehtml).toContain("<noscript><link href=\"/styles-shared.css\" rel=\"stylesheet\"><link href=\"/styles-home.css\" rel=\"stylesheet\"></noscript>");
             expect(homehtml).not.toContain("</title>\n</head>");
             const abouthtml = result.compilation.assets["about.html"].source();
-            expect(abouthtml).toContain("<link href=\"/styles-shared.css\" rel=\"preload\" as=\"style\" onload=\"this.rel='stylesheet'\"><link href=\"/styles-about.css\" rel=\"preload\" as=\"style\" onload=\"this.rel='stylesheet'\">");
+            expect(abouthtml).toContain("<link href=\"/styles-shared.css\" rel=\"preload\" as=\"style\" onload=\"this.onload=null;this.rel='stylesheet'\"><link href=\"/styles-about.css\" rel=\"preload\" as=\"style\" onload=\"this.onload=null;this.rel='stylesheet'\"");
             expect(abouthtml).toContain("<noscript><link href=\"/styles-shared.css\" rel=\"stylesheet\"><link href=\"/styles-about.css\" rel=\"stylesheet\"></noscript>");
             expect(abouthtml).not.toContain("</title>\n</head>");
             done();
@@ -327,11 +417,11 @@ describe("PreloadCssPlugin works with commonsChunkPlugin", function() {
             console.log(result.compilation.errors);
             expect(JSON.stringify(result.compilation.errors)).toBe("[]");
             const homehtml = result.compilation.assets["home.html"].source();
-            expect(homehtml).toContain("<link href=\"/styles-shared.css\" rel=\"stylesheet\"><link href=\"/styles-home.css\" rel=\"preload\" as=\"style\" onload=\"this.rel='stylesheet'\">");
+            expect(homehtml).toContain("<link href=\"/styles-shared.css\" rel=\"stylesheet\"><link href=\"/styles-home.css\" rel=\"preload\" as=\"style\" onload=\"this.onload=null;this.rel='stylesheet'\"");
             expect(homehtml).toContain("<noscript><link href=\"/styles-home.css\" rel=\"stylesheet\"></noscript>");
             expect(homehtml).not.toContain("</title>\n</head>");
             const abouthtml = result.compilation.assets["about.html"].source();
-            expect(abouthtml).toContain("<link href=\"/styles-shared.css\" rel=\"stylesheet\"><link href=\"/styles-about.css\" rel=\"preload\" as=\"style\" onload=\"this.rel='stylesheet'\">");
+            expect(abouthtml).toContain("<link href=\"/styles-shared.css\" rel=\"stylesheet\"><link href=\"/styles-about.css\" rel=\"preload\" as=\"style\" onload=\"this.onload=null;this.rel='stylesheet'\"");
             expect(abouthtml).toContain("<noscript><link href=\"/styles-about.css\" rel=\"stylesheet\"></noscript>");
             expect(abouthtml).not.toContain("</title>\n</head>");
             done();

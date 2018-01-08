@@ -2,15 +2,19 @@
 
 const clone = require("clone");
 const HtmlWebpackPlugin = require("html-webpack-plugin");
+const merge = require("lodash.merge");
 
 const defaultOptions = {
     blacklist: [/\.map/],
-    noscript: true
+    noscript: true,
+    linkEventHandlers: {
+        onload: "this.onload=null;this.rel='stylesheet'"
+    }
 };
 
 class PreloadCssPlugin {
     constructor(options) {
-        this.options = Object.assign({}, defaultOptions, options);
+        this.options = merge({}, defaultOptions, options);
         this.noScriptArray = [];
     }
 
@@ -20,12 +24,11 @@ class PreloadCssPlugin {
         compiler.plugin("compilation", compilation => {
             compilation.plugin("html-webpack-plugin-alter-asset-tags", (htmlPluginData, cb) => {
                 this.noScriptArray = [];
-                const defaultPreload = {
+                const defaultPreload = Object.assign({
                     as: "style",
-                    onload: "this.rel='stylesheet'",
                     rel: "preload"
-                };
-                // test to see if the name of the file is in our blacklist. blacklist can be a string or regex pattern 
+                }, options.linkEventHandlers );
+                // test to see if the name of the file is in our blacklist. blacklist can be a string or regex pattern
                 htmlPluginData.head.filter(entry => {
                     return options.blacklist.every(regex => {
                         if (!(regex instanceof RegExp)) {
@@ -44,8 +47,8 @@ class PreloadCssPlugin {
                     });
                     if (htmlPluginData.head[idx]) {
                         htmlPluginData.head[idx].attributes = Object.assign({}, script.attributes, defaultPreload);
-                    };
-                })
+                    }
+                });
                 cb(null, htmlPluginData);
             });
         });

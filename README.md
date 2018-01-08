@@ -52,6 +52,7 @@ Preload Css plugin offers two options at this point in time.
 |:---:|:---:|:---:  |:----------|
 |**`blacklist`**|`{Array}`|`[/\.map/]`|Allows for excluding files from being asynchronously loaded. Accepts regex pattern or string.|
 |**`noscript`**|`{Boolean}`|`True`|Indicates whether or not to include noscript snippet on dom|
+|**`linkEventHandlers`**|`{Object}`|`{onload: "this.onload=null;this.rel='stylesheet'"}`|Modifies self to become a stylesheet after loading. This default value is provided by Filament Group. You can leverage any link event handlers you think are necessary, as defined by W3C spec. This is merged using lodash, you may set your settings to only have onerror and it'll join onload.|
 
 ```js
 plugins: [
@@ -59,7 +60,10 @@ plugins: [
     new ExtractTextPlugin("[name].css"),
     new PreloadCssPlugin({
         blacklist: [/\.map/],
-        noscript: true
+        noscript: true,
+        linkEventHandlers: {
+            onload: "this.onload=null;this.rel='stylesheet'"
+        }
     })
 ]
 ```
