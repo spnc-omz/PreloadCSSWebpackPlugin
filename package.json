@@ -1,6 +1,6 @@
 {
   "name": "preload-css-webpack-plugin",
-  "version": "0.1.0",
+  "version": "0.2.0",
   "description": "An addon for html-webpack-plugin",
   "main": "index.js",
   "files": [
@@ -27,14 +27,19 @@
     "url": "https://github.com/spnc-omz/PreloadCSSWebpackPlugin/issues"
   },
   "homepage": "https://github.com/spnc-omz/PreloadCSSWebpackPlugin#readme",
-  "devDependencies": {
+  "dependencies": {
     "clone": "^2.1.1",
+    "html-webpack-plugin": "^2.26.0",
+    "lodash.merge": "^4.6.0"
+  },
+  "devDependencies": {
     "css-loader": "^0.28.7",
     "eslint": "^3.14.1",
     "eslint-config-google": "^0.7.1",
     "extract-text-webpack-plugin": "^3.0.2",
-    "html-webpack-plugin": "^2.26.0",
+    "install": "^0.10.2",
     "jasmine": "^2.5.3",
+    "npm": "^5.6.0",
     "style-loader": "^0.19.0",
     "webpack": "^3.2.0",
     "webpack-canary": "^1.0.6"
